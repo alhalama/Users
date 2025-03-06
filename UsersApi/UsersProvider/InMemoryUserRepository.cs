@@ -1,62 +1,61 @@
 using Microsoft.AspNetCore.Mvc;
 using UsersApi.Models;
 
-namespace UsersApi.Providers;
+namespace UsersApi.UsersProvider;
 
 /// <summary>
 /// In memory user repository.  Note that this implementation isn't thread safe.
 /// </summary>
 public class InMemoryUserRepository : IUserRepository
 {
-    public static long nextId = 3;
-    public static readonly Dictionary<long, User> _repository = new Dictionary<long, User>()
+    public static readonly Dictionary<Guid, User> _repository = new Dictionary<Guid, User>();
+ 
+    public InMemoryUserRepository()
     {
-        {0,  new User() {
-            ID = 0,
+        this.AddUser(new User() {
+            ID = Guid.NewGuid(),
             FirstName = "Bob",
             LastName = "Smith",
             Email = "bob.smith@nowhere.local",
             DateOfBirth = new DateTime(1954, 11,24),
             PhoneNumber = 1234567890         
-        }},
-        {1, new User() {
-            ID = 1,
+        });
+        this.AddUser(new User() {
+            ID = Guid.NewGuid(),
             FirstName = "Jane",
             LastName = "Smith",
             Email = "jane.smith@nowhere.local",
             DateOfBirth = new DateTime(1957, 8,22),
             PhoneNumber = 1234567890          
-        }},
-        {2, new User() {
-            ID = 2,
+        });
+        this.AddUser(new User() {
+            ID = Guid.NewGuid(),
             FirstName = "Fred",
             LastName = "Smith",
             Email = "fred.smith@nowhere.local",
             DateOfBirth = new DateTime(1980, 7,3),
             PhoneNumber = 1234567890
-        }}
-    };
+        });
+    }
 
-    public long AddUser(User user)
+    public void AddUser(User user)
     {
         ValidateEmailIsUnique(user.Email);
-        user.ID = nextId++;
         _repository.Add(user.ID, user);
-        return user.ID;
     }
 
     /// <summary>
     /// Deletes user for specified id or nothing if the user doesn't exist.
     /// </summary>
     /// <param name="id"></param>
-    public void DeleteUser(long id) => _repository.Remove(id);
+    public void DeleteUser(Guid id) => _repository.Remove(id);
 
     /// <summary>
     /// Returns a specific user
     /// </summary>
     /// <param name="id">id of the user to return</param>
     /// <returns>User matching the id passed in.</returns>
-    public User GetUser(long id) => _repository[id];
+    public User GetUser(Guid id) => _repository[id];
 
     public IEnumerable<User> GetUsers()
     {

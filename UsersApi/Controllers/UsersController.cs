@@ -3,7 +3,7 @@ using System.Net;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using UsersApi.Models;
-using UsersApi.Providers;
+using UsersApi.UsersProvider;
 
 namespace UsersApi.Controllers;
 
@@ -33,7 +33,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public User Get(long id)
+    public User Get(Guid id)
     {
         _logger.LogInformation($"Get User for ID {id}");
         return _userRepository.GetUser(id);
@@ -47,7 +47,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpPut("id")]
-    public void Put(long id, User user)
+    public void Put(Guid id, User user)
     {
         _logger.LogInformation($"Updating user with id {id}");
         // TODO: Replace user model with contract that doesn't have the ID.
@@ -56,7 +56,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public void Delete(long id)
+    public void Delete(Guid id)
     {
         _logger.LogInformation($"Deleting user with id {id}");
         _userRepository.DeleteUser(id);

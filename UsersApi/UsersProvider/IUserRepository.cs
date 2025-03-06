@@ -1,4 +1,6 @@
 using UsersApi.Models;
+
+namespace UsersApi.UsersProvider;
 public interface IUserRepository
 {
     /// <summary>
@@ -6,13 +8,13 @@ public interface IUserRepository
     /// </summary>
     /// <param name="user">user to add.  Note that the ID will be ignored and the new Id will be returned</param>
     /// <returns>Id of the user that was added.</returns>
-    long AddUser(User user);
+    void AddUser(User user);
 
     /// <summary>
     /// Deletes specified user if exists
     /// </summary>
     /// <param name="id">Id of the user to delete.</param>
-    void DeleteUser(long id);
+    void DeleteUser(Guid id);
 
     /// <summary>
     /// Returns a enumerable of all users
@@ -25,7 +27,7 @@ public interface IUserRepository
     /// </summary>
     /// <param name="id">Id of the user to return.</param>
     /// <returns>User</returns>
-    User GetUser(long id);
+    User GetUser(Guid id);
 
     /// <summary>
     /// Updates a user.
